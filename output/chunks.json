@@ -1,0 +1,12 @@
+[
+  {
+    "id": "C:/VS_CODE/Data_Chunker_Python/raw_pdfs/test1.pdf_0",
+    "title": "C:/Vs Code/Data Chunker Python/Raw Pdfs/Test1.Pdf",
+    "source": "C:/VS_CODE/Data_Chunker_Python/raw_pdfs/test1.pdf",
+    "tags": [
+      "RA"
+    ],
+    "date": "2025-08-13",
+    "text": "this is a test.\ntesting 1 2 3.\nbeep boop bop.\n"
+  }
+]
