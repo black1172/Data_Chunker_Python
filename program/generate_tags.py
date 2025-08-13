@@ -6,7 +6,7 @@ STOPWORDS = {
     "that", "as", "are", "at", "be", "from", "or", "by", "this", "an"
 }
 
-def auto_tags(text, n=6):
+def auto_tags(text, n=8):
     tokens = re.findall(r'\b\w+\b', text.lower())
     filtered = [t for t in tokens if t not in STOPWORDS and len(t) > 2]
     most_common = [word for word, _ in Counter(filtered).most_common(n)]

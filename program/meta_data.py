@@ -1,10 +1,10 @@
 import datetime as dt
 import generate_tags as gt
 
-def fill_meta_data(chunks, tokens, filename, encoding, tags):
+def fill_meta_data(text, chunks, filename, encoding, tags):
 
     # Retrieve tags
-    tags = gt.auto_tags(tokens)
+    tags = gt.auto_tags(text)
 
     # Keep track of datas date
     date_str = dt.date.today().isoformat()
