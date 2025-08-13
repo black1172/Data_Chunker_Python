@@ -1,4 +1,6 @@
 import json
 
-def write_to_json():
-    pass
+def write_to_json(meta_chunks):
+    with open("chunks.json", "w", encoding="utf-8") as chunked_file:
+        json.dump(meta_chunks, f, ensure_ascii=False, indent=2)
+    return chunked_file
