@@ -1,4 +1,4 @@
-def chunk(tokens, chunk_size=400, overlap=80):
+def chunk(tokens, chunk_size=150, overlap=15):
 
     # Declarations
     chunks = []
