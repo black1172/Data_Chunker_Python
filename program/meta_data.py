@@ -1,7 +1,7 @@
 import datetime as dt
 
 def fill_meta_data(chunks, filename, encoding, tags):
-    
+
     # Handle empty tags
     if tags is None:
             tags = []

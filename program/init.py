@@ -1,8 +1,3 @@
-import pdf_reader as r
-import tokenize_text as t
-import chunk_text as c
-import meta_data as m
-
 class PDFProcessor:
     def read_pdf(self):
         import pdf_reader as r
@@ -18,7 +13,8 @@ class PDFProcessor:
 
     def add_metadata(self):
         import meta_data as m
-        return m.fill_meta_data(self.chunks, filename=self.name)
+        import tiktoken as tt
+        return m.fill_meta_data(self.chunks, filename=self.name, encoding = tt.get_encoding("cl100k_base"), tags = ["RA"])
     
     def __init__(self, filename):
         self.name = filename
