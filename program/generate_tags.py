@@ -4,7 +4,8 @@ import nltk
 from nltk.stem import PorterStemmer
 from nltk import pos_tag, word_tokenize
 from nltk.corpus import stopwords
-
+nltk.download('punkt_tab')
+nltk.download('averaged_perceptron_tagger_eng')
 
 # OSU-specific stopwords
 OSU_STOPWORDS = {
@@ -21,8 +22,7 @@ OSU_STOPWORDS = {
     "website", "web", "site", "sites", "portal", "directory", "map", "maps", "member", "members", "office", "offices"
 }
 
-# Combine NLTK and OSU-specific stopwords
-STOPWORDS = set(stopwords.words('english')).union(OSU_STOPWORDS)
+
 
 def generate_tags_from_text(text, top_n=8):
     # Download NLTK resources if not present
@@ -34,6 +34,14 @@ def generate_tags_from_text(text, top_n=8):
         nltk.data.find('taggers/averaged_perceptron_tagger')
     except LookupError:
         nltk.download('averaged_perceptron_tagger')
+    try:
+        nltk.data.find('corpora/stopwords')
+    except LookupError:
+        nltk.download('stopwords')
+
+
+    # Combine NLTK and OSU-specific stopwords after ensuring resources are available
+    STOPWORDS = set(stopwords.words('english')).union(OSU_STOPWORDS)
 
     # Tokenize and lowercase
     words = word_tokenize(text.lower())
