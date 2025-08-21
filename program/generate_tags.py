@@ -1,4 +1,3 @@
-
 import re
 from collections import Counter
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -31,7 +30,7 @@ def generate_tags_from_text(text, top_n=8):
     STOPWORDS = set(stopwords.words('english')).union(OSU_STOPWORDS)
 
     # TF-IDF keyword extraction
-    vectorizer = TfidfVectorizer(stop_words=STOPWORDS, max_features=top_n)
+    vectorizer = TfidfVectorizer(stop_words=list(STOPWORDS), max_features=top_n)
     tfidf_matrix = vectorizer.fit_transform([text])
     tfidf_tags = vectorizer.get_feature_names_out()
 
