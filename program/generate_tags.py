@@ -1,7 +1,7 @@
 import re
 from collections import Counter
 import nltk
-from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
 from nltk import pos_tag, word_tokenize
 from nltk.corpus import stopwords
 nltk.download('punkt_tab')
@@ -38,7 +38,10 @@ def generate_tags_from_text(text, top_n=8):
         nltk.data.find('corpora/stopwords')
     except LookupError:
         nltk.download('stopwords')
-
+    try:
+        nltk.data.find('corpora/wordnet')
+    except LookupError:
+        nltk.download('wordnet')
 
     # Combine NLTK and OSU-specific stopwords after ensuring resources are available
     STOPWORDS = set(stopwords.words('english')).union(OSU_STOPWORDS)
@@ -52,11 +55,11 @@ def generate_tags_from_text(text, top_n=8):
     tagged = pos_tag(words)
     nouns = [word for word, pos in tagged if pos.startswith('NN')]
 
-    # Stemming
-    stemmer = PorterStemmer()
-    stemmed_nouns = [stemmer.stem(word) for word in nouns]
+    # Lemmatization
+    lemmatizer = WordNetLemmatizer()
+    lemmatized_nouns = [lemmatizer.lemmatize(word, pos='n') for word in nouns]
 
-    # Count most common stemmed nouns
-    common_nouns = [word for word, _ in Counter(stemmed_nouns).most_common(top_n)]
+    # Count most common lemmatized nouns
+    common_nouns = [word for word, _ in Counter(lemmatized_nouns).most_common(top_n)]
     return common_nouns
 
