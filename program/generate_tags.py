@@ -1,11 +1,12 @@
+
 import re
 from collections import Counter
-import nltk
-from nltk.stem import WordNetLemmatizer
-from nltk import pos_tag, word_tokenize
+from sklearn.feature_extraction.text import TfidfVectorizer
+import spacy
 from nltk.corpus import stopwords
-nltk.download('punkt_tab')
-nltk.download('averaged_perceptron_tagger_eng')
+
+nlp = spacy.load('en_core_web_sm')
+
 
 # OSU-specific stopwords
 OSU_STOPWORDS = {
@@ -24,42 +25,28 @@ OSU_STOPWORDS = {
 
 
 
-def generate_tags_from_text(text, top_n=8):
-    # Download NLTK resources if not present
-    try:
-        nltk.data.find('tokenizers/punkt')
-    except LookupError:
-        nltk.download('punkt')
-    try:
-        nltk.data.find('taggers/averaged_perceptron_tagger')
-    except LookupError:
-        nltk.download('averaged_perceptron_tagger')
-    try:
-        nltk.data.find('corpora/stopwords')
-    except LookupError:
-        nltk.download('stopwords')
-    try:
-        nltk.data.find('corpora/wordnet')
-    except LookupError:
-        nltk.download('wordnet')
 
-    # Combine NLTK and OSU-specific stopwords after ensuring resources are available
+def generate_tags_from_text(text, top_n=8):
+    # Combine NLTK and OSU-specific stopwords
     STOPWORDS = set(stopwords.words('english')).union(OSU_STOPWORDS)
 
-    # Tokenize and lowercase
-    words = word_tokenize(text.lower())
-    # Remove stopwords and non-alpha
-    words = [w for w in words if w.isalpha() and w not in STOPWORDS]
+    # TF-IDF keyword extraction
+    vectorizer = TfidfVectorizer(stop_words=STOPWORDS, max_features=top_n)
+    tfidf_matrix = vectorizer.fit_transform([text])
+    tfidf_tags = vectorizer.get_feature_names_out()
 
-    # POS tagging and noun extraction
-    tagged = pos_tag(words)
-    nouns = [word for word, pos in tagged if pos.startswith('NN')]
+    # spaCy keyphrase and entity extraction
+    doc = nlp(text)
+    keyphrases = set()
+    for chunk in doc.noun_chunks:
+        phrase = chunk.text.lower()
+        if not any(word in STOPWORDS for word in phrase.split()):
+            keyphrases.add(phrase)
 
-    # Lemmatization
-    lemmatizer = WordNetLemmatizer()
-    lemmatized_nouns = [lemmatizer.lemmatize(word, pos='n') for word in nouns]
+    entities = set([ent.text.lower() for ent in doc.ents if not any(word in STOPWORDS for word in ent.text.lower().split())])
 
-    # Count most common lemmatized nouns
-    common_nouns = [word for word, _ in Counter(lemmatized_nouns).most_common(top_n)]
-    return common_nouns
+    # Combine and deduplicate tags
+    tags = set(tfidf_tags) | keyphrases | entities
+    tags = [tag for tag in tags if len(tag) > 2][:top_n]
+    return tags
 
