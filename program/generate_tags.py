@@ -1,20 +1,12 @@
-
 import re
 from collections import Counter
 import nltk
 from nltk.stem import PorterStemmer
 from nltk import pos_tag, word_tokenize
+from nltk.corpus import stopwords
 
 # Expanded stopwords list
-STOPWORDS = {
-    "the", "and", "is", "in", "it", "you", "of", "to", "a", "for", "on", "with",
-    "at", "by", "an", "be", "this", "that", "from", "or", "as", "are", "was",
-    "were", "but", "so", "if", "can", "all", "about", "into", "not", "no", "your",
-    "their", "them", "they", "there", "then", "than", "such", "just", "also",
-    "very", "more", "most", "some", "any", "every", "many", "because", "how",
-    "what", "which", "when", "where", "who", "whom", "why", "while", "life",
-    "daily", "long", "thing", "good", "new", "time", "day", "online"
-}
+STOPWORDS = set(stopwords.words('english'))
 
 def generate_tags_from_text(text, top_n=8):
     # Download NLTK resources if not present
