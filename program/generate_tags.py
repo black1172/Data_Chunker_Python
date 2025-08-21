@@ -5,8 +5,24 @@ from nltk.stem import PorterStemmer
 from nltk import pos_tag, word_tokenize
 from nltk.corpus import stopwords
 
-# Expanded stopwords list
-STOPWORDS = set(stopwords.words('english'))
+
+# OSU-specific stopwords
+OSU_STOPWORDS = {
+    "ohio", "state", "university", "osu", "buckeye", "campus", "student", "students",
+    "faculty", "staff", "department", "office", "resources", "services", "program",
+    "programs", "college", "colleges", "school", "schools", "center", "centers",
+    "academic", "academics", "education", "educational", "advising", "advisor",
+    "advisors", "contact", "information", "email", "phone", "address", "website",
+    "homepage", "login", "apply", "application", "applications", "events", "event",
+    "calendar", "news", "about", "home", "main", "menu", "search",
+    "link", "links", "page", "pages", "pdf", "doc", "docs", "file", "files",
+    "copyright", "reserved", "year", "date", "update", "updated", "visit",
+    "location", "locations", "building", "buildings", "room", "rooms", "hours",
+    "website", "web", "site", "sites", "portal", "directory", "map", "maps", "member", "members", "office", "offices"
+}
+
+# Combine NLTK and OSU-specific stopwords
+STOPWORDS = set(stopwords.words('english')).union(OSU_STOPWORDS)
 
 def generate_tags_from_text(text, top_n=8):
     # Download NLTK resources if not present
